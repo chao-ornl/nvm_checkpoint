@@ -8,61 +8,61 @@
 #include "ORNVCR.h"
 
 bool
-ORNVCR_init(void)
+ORNVCR_init(varMonitor_t **mon)
 {
     return false;
 }
 
 bool
-ORNVCR_exit(void)
+ORNVCR_exit(varMonitor_t **mon)
 {
     return false;
 }
 
 bool
-ORNVCR_register(void* var_address, varProfile_t profile)
+ORNVCR_register(varMonitor_t *mon, void* var_address, varProfile_t profile)
 {
     return false;
 }
 
 bool
-ORNVCR_deregister(void* var_address)
+ORNVCR_deregister(varMonitor_t *mon, void* var_address)
 {
     return false;
 }
 
 bool
-ORNVCR_get_profile(int var_address, varProfile_t *profile)
+ORNVCR_get_profile(varMonitor_t *mon, int var_address, varProfile_t *profile)
 {
     return false;
 }
 
 bool
-ORNVCR_set_profile(int var_address, varProfile_t profile)
+ORNVCR_set_profile(varMonitor_t *mon, int var_address, varProfile_t profile)
 {
     return false;
 }
 
 bool
-ORNVCR_need_check(void)
+ORNVCR_need_check(varMonitor_t *mon)
 {
     return false;
 }
 
 bool
-ORNVCR_checkpoint(void)
+ORNVCR_checkpoint(varMonitor_t *mon)
 {
     return false;
 }
 
 bool
-ORNVCR_check_exist (void)
+ORNVCR_check_exist (varMonitor_t *mon)
 {
     return false;
 }
 
 bool
-ORNVCR_restore (int var_address, int size)
+ORNVCR_restore (varMonitor_t *mon, int var_address, int size)
 {
     return false;
 }
