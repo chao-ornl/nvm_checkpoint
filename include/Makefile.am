@@ -14,4 +14,4 @@ bin_PROGRAMS =
 libornvcr_la_SOURCES =  \
         ORNVCR.h
 
-
+include_HEADERS = ORNVCR.h
