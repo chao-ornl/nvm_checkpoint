@@ -7,6 +7,7 @@
 #define ORNVCR_TYPES_H
 
 #include <time.h>
+#include <sys/time.h>
 
 typedef struct _chkptScheme {
     int     where_to_checkpoint;
@@ -16,11 +17,11 @@ typedef struct _chkptScheme {
 
 typedef struct varProfile_t {
     int                 index; /* As in the allocate order; SCR uses the same approach */
-    int                 allocate_time;
+    struct timeval      allocate_time;
     int                 latest_checkpoint_time;
-    int                 size;
+    size_t              size;
     int                 type; /* Data type/structure */
-    int                 dirty_ratio;
+    double              dirty_ratio;
     int                 placement; /* Current variable place: stack, DRAM, SSD */
     chkptScheme_t       cScheme;
 #if 0
