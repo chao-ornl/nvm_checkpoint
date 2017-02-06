@@ -20,7 +20,7 @@ ORNVCR_exit(void)
 }
 
 bool
-ORNVCR_register(void* var_address, varProfile profile)
+ORNVCR_register(void* var_address, varProfile_t profile)
 {
     return false;
 }
@@ -32,13 +32,13 @@ ORNVCR_deregister(void* var_address)
 }
 
 bool
-ORNVCR_get_profile(int var_address, varProfile *profile)
+ORNVCR_get_profile(int var_address, varProfile_t *profile)
 {
     return false;
 }
 
 bool
-ORNVCR_set_profile(int var_address, varProfile profile)
+ORNVCR_set_profile(int var_address, varProfile_t profile)
 {
     return false;
 }

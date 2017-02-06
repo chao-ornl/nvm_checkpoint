@@ -9,7 +9,7 @@
 # $HEADER$
 #
 
-SUBDIRS = src tests
+SUBDIRS = src include
 
 EXTRA_DIST =    \
     COPYING     \

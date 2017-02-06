@@ -9,8 +9,8 @@
 # $HEADER$
 #
 
-AC_INIT([nv_chckpt], [0.1], [valleegr@ornl.gov])
-AC_CONFIG_SRCDIR([include/nv-chckpt.c])
+AC_INIT([ornvcr], [0.1], [valleegr@ornl.gov])
+AC_CONFIG_SRCDIR([include/ORNVCR.h])
 
 AM_INIT_AUTOMAKE([dist-bzip2 subdir-objects foreign tar-ustar])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -30,6 +30,6 @@ CPPFLAGS_save="$CPPFLAGS"
 top_srcdir=`pwd`
 AC_SUBST([CPPFLAGS],["-I$top_srcdir/include $CPPFLAGS_save -std=c99"])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile include/Makefile src/Makefile])
 
 AC_OUTPUT

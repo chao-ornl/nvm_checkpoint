@@ -6,6 +6,8 @@
 #ifndef ORNVCR_INCLUDE_H
 #define ORNVCR_INCLUDE_H
 
+#include "ORNVCR_types.h"
+
 /**
  * The ORNVCR_init() function (1) allocates necessary variables with proper
  * data structures defined in the ORCR API library, such as, user program
@@ -46,7 +48,7 @@ ORNVCR_exit(void);
  * insufficient space for the variable table, etc.
  */
 bool
-ORNVCR_register(void* var_address, varProfile profile);
+ORNVCR_register(void* var_address, varProfile_t profile);
 
 /**
  * The ORNVCR_deregister() function releases the profile (including the
@@ -72,7 +74,7 @@ ORNVCR_deregister(void* var_address);
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_get_profile(int var_address, varProfile *profile);
+ORNVCR_get_profile(int var_address, varProfile_t *profile);
 
 /**
  * The ORNVCR_set_profile() function sets the profile (including the checkpoint
@@ -86,7 +88,7 @@ ORNVCR_get_profile(int var_address, varProfile *profile);
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_set_profile(int var_address, varProfile profile);
+ORNVCR_set_profile(int var_address, varProfile_t profile);
 
 /**
  * The ORNVCR_need_check() function checks whether a checkpoint is necessary. The
@@ -144,4 +146,4 @@ ORNVCR_restore (int var_address, int size);
 
 #endif /* ORNVCR_INCLUDE_H */
 
-% vim:tabstop=4:shiftwidth=4:expandtab:textwidth=78:filetype=C
+/* vim: set tabstop=4:shiftwidth=4:expandtab:textwidth=78:filetype=C */
