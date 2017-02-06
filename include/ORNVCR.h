@@ -15,6 +15,8 @@
  * checkpoint/restart policy; and (3) creates “checkpoint thread” if we
  * apply the “proactive” checkpoint shema; etc.
  *
+ * @param[in,out]  mon  Opaque handle representing the internal state of the
+ *                      infrastructure
  * @return TRUE upon success.
  * @return FALSE upon error, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid; ENOMEM: There is
@@ -22,18 +24,21 @@
  * created.
  */
 bool
-ORNVCR_init(void);
+ORNVCR_init(varMonitor_t **mon);
 
 /**
  * The ORNVCR_exit() function releases the resource used for the checkpoint
  * system and exits.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure. It is set to NULL upon success to
+ *                      prevent any further usage.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_exit(void);
+ORNVCR_exit(varMonitor_t **mon);
 
 /**
  * The ORNVCR_register() function registers the program variable allocated to
@@ -42,13 +47,15 @@ ORNVCR_exit(void);
  * register. The profile parameter specifies the profile (including the
  * checkpoint schema) for the variable.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid; ENOMEM: There is
  * insufficient space for the variable table, etc.
  */
 bool
-ORNVCR_register(void* var_address, varProfile_t profile);
+ORNVCR_register(varMonitor_t *mon, void* var_address, varProfile_t profile);
 
 /**
  * The ORNVCR_deregister() function releases the profile (including the
@@ -56,25 +63,29 @@ ORNVCR_register(void* var_address, varProfile_t profile);
  * to free(), this function could be used to release the profile. The var_address
  * parameter specifies the variable.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid; EINVAL: The options
  * argument is not valid.
  */
 bool
-ORNVCR_deregister(void* var_address);
+ORNVCR_deregister(varMonitor_t *mon, void* var_address);
 
 /**
  * The ORNVCR_get_profile() function returns the profile (including the
  * checkpoint scheme) of a given variable. The var_address parameter
  * specifies the variable. The profile parameter saves the profile returned.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_get_profile(int var_address, varProfile_t *profile);
+ORNVCR_get_profile(varMonitor_t *mon, int var_address, varProfile_t *profile);
 
 /**
  * The ORNVCR_set_profile() function sets the profile (including the checkpoint
@@ -83,12 +94,14 @@ ORNVCR_get_profile(int var_address, varProfile_t *profile);
  * var_address parameter specifies the variable. The profile parameter
  * specifies the profile (including the checkpoint schema) for the variable.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_set_profile(int var_address, varProfile_t profile);
+ORNVCR_set_profile(varMonitor_t *mon, int var_address, varProfile_t profile);
 
 /**
  * The ORNVCR_need_check() function checks whether a checkpoint is necessary. The
@@ -96,34 +109,40 @@ ORNVCR_set_profile(int var_address, varProfile_t profile);
  * then makes decision on whether to checkpoint based on the global status of all
  * the variables.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_need_check(void);
+ORNVCR_need_check(varMonitor_t *mon);
 
 /**
  * The ORNVCR_checkpoint() function executes the checkpoint based on the
  * variable profile table.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_checkpoint(void);
+ORNVCR_checkpoint(varMonitor_t *mon);
 
 /**
  *  The ORNVCR_check_exist () function checks if checkpoint file exists at
  *  predefined locations.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_check_exist (void);
+ORNVCR_check_exist (varMonitor_t *mon);
 
 /**
  * The ORNVCR_restore () function (1) loads the hash table from checkpoint file,
@@ -137,12 +156,14 @@ ORNVCR_check_exist (void);
  * timestep should be checkpointed and restored so that it can restart at the
  * correct timestep.
  *
+ * @param[in,out]   mon Opaque handle representing the internal state of the
+ *                      infrastructure.
  * @return TRUE upon success.
  * @return FALSE upon errors, and the global variable errno is set to indicate
  * the error; EINVAL: The options argument is not valid.
  */
 bool
-ORNVCR_restore (int var_address, int size);
+ORNVCR_restore (varMonitor_t *mon, int var_address, int size);
 
 #endif /* ORNVCR_INCLUDE_H */
 

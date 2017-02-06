@@ -39,7 +39,4 @@ typedef struct _varMonitor {
     time_t          latest_checkpoint_time;
 } varMonitor_t;
 
-/* GV: we should avoid global variables as much as possible */
-varMonitor_t monitor;
-
 #endif /* ORNVCR_TYPES_H */
