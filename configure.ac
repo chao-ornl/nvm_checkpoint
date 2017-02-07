@@ -60,12 +60,25 @@ NVM_CHECK_WITHDIR([nvm-libdir],[$with_nvm_libdir], [libnvm*])
 AS_IF([test ! -z "$with_nvm_libdir" -a "$with_nvm_libdir" != "yes"],
       [nvm_libdir="$with_nvm_libdir"])
 
+AC_ARG_WITH([nvm-includedir], [AC_HELP_STRING([--with-nvm-includedir=DIR],
+             [Search for NVmalloc headers in DIR])])
+NVM_CHECK_WITHDIR([nvm-includedir],[$with_nvm_includedir], [nvm.h])
+AS_IF([test ! -z "$with_nvm_includedir" -a "$with_nvm_includedir" != "yes"],
+      [nvm_includedir="$with_nvm_includedir"])
+
 CPPFLAGS_save="$CPPFLAGS"
 AS_IF([test ! -z "$nvm_dir"],
       AC_SUBST([CPPFLAGS],["-I$nvm_dir/include $CPPFLAGS_save"]))
+
 LDFLAGS_save="$LDFLAGS"
 AS_IF([test ! -z "$nvm_libdir"],
       AC_SUBST([LDFLAGS],(["-L$nvm_libdir -Wl,-rpath,$nvm_libdir $LDFLAGS_save"])))
+
+LDFLAGS_save="$LDFLAGS"
+AS_IF([test ! -z "$nvm_includedir"],
+      AC_SUBST([LDFLAGS],(["-I$nvm_includedir $LDFLAGS_save"])))
+
+DFLAGS_save="$LDFLAGS"
 AS_IF([test ! -z "$nvm_dir" -a -z "$nvm_libdir"],
       AC_SUBST([LDFLAGS],(["-L$nvm_dir/lib -Wl,-rpath,$nvm_dir/lib $LDFLAGS_save"])))
 
