@@ -6,6 +6,7 @@
 #ifndef ORNVCR_INCLUDE_H
 #define ORNVCR_INCLUDE_H
 
+#include <stdbool.h>
 #include "ORNVCR_types.h"
 
 /**
