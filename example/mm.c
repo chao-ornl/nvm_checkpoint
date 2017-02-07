@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
 		if(ORNVCR_check_exist (mon)==TRUE){
 			//when restore, it should be the same order as these variables are registered
 			int ckpt_timestep;
-			ORNVCR_restore (varMonitor_t *mon, timestep, sizeof(int));
+			ORNVCR_restore (varMonitor_t *mon, &ckpt_timestep, sizeof(int));
 			//if current timestep less than checkpoint timestep, restore
 			if(ckpt_timestep>timestep){
 				timestep=ckpt_timestep;
