@@ -9,11 +9,8 @@
 # $HEADER$
 #
 
-SUBDIRS = src include tests
+bin_PROGRAMS =              \
+    ornvcr_init_test
 
-EXTRA_DIST =    \
-    COPYING     \
-    INSTALL     \
-    README.md
-
-ACLOCAL_AMFLAGS = -I m4
+ornvcr_init_test_SOURCES = ornvcr_init_test.c
+ornvcr_init_test_LDADD = ../src/libornvcr.la

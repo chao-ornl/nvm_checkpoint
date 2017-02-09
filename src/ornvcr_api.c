@@ -3,20 +3,41 @@
  *                          All rights reserved.
  */
 
-#include <stdbool.h>
+#include <errno.h>
+#include <stdlib.h>
 
 #include "ORNVCR.h"
 
 bool
 ORNVCR_init(varMonitor_t **mon)
 {
-    return false;
+    varMonitor_t *_m = NULL;
+
+    _m = calloc (1, sizeof (varMonitor_t));
+    if (_m == NULL)
+    {
+        errno = ENOMEM;
+        return false;
+    }
+
+    *mon = _m;
+
+    return true;
 }
 
 bool
 ORNVCR_exit(varMonitor_t **mon)
 {
-    return false;
+    if (mon != NULL)
+    {
+        if (*mon != NULL)
+        {
+            free (*mon);
+            *mon = NULL;
+        }
+    }
+
+    return true;
 }
 
 bool

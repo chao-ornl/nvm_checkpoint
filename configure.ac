@@ -30,6 +30,6 @@ CPPFLAGS_save="$CPPFLAGS"
 top_srcdir=`pwd`
 AC_SUBST([CPPFLAGS],["-I$top_srcdir/include $CPPFLAGS_save -std=c99"])
 
-AC_CONFIG_FILES([Makefile include/Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile include/Makefile src/Makefile tests/Makefile])
 
 AC_OUTPUT
