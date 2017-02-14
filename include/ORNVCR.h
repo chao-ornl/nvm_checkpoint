@@ -166,6 +166,34 @@ ORNVCR_check_exist (varMonitor_t *mon);
 bool
 ORNVCR_restore (varMonitor_t *mon, int var_address, int size);
 
+
+/**
+* _ORNVCR_monitor_tracking() calls _ORNVCR_monitor_get_dirtyratio periodically to get the dirty ratio
+* @param[in,out]   mon      Opaque handle representing the internal state of the
+*                           infrastructure. It is set to NULL upon success to
+*                           prevent any further usage.
+*                  period   The time interval of calling _ORNVCR_monitor_get_dirtyratio
+* @return TRUE upon success.
+* @return FALSE upon errors, and the global variable errno is set to indicate
+* the error; EINVAL: The options argument is not valid.
+*/
+bool
+_ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period);
+
+/**
+* _ORNVCR_monitor_get_dirtyratio() use liborhash’s function to calculate the new hash and the dirty ratio. 
+* It iterate through all varProfiles from monitor->headProfile.
+* @param[in,out]   mon Opaque handle representing the internal state of the
+*                      infrastructure. It is set to NULL upon success to
+*                      prevent any further usage.
+* @return TRUE upon success.
+* @return FALSE upon errors, and the global variable errno is set to indicate
+* the error; EINVAL: The options argument is not valid.
+*/
+bool
+_ORNVCR_monitor_get_dirtyratio(varMonitor_t **mon);
+
+
 #endif /* ORNVCR_INCLUDE_H */
 
 /* vim: set tabstop=4:shiftwidth=4:expandtab:textwidth=78:filetype=C */
