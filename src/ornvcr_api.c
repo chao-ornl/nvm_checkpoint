@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "ORNVCR.h"
+#include "uthash.h"
 
 bool
 ORNVCR_init(varMonitor_t **mon)

@@ -9,6 +9,10 @@
 #include <time.h>
 #include <sys/time.h>
 
+#ifndef UTHASH_TYPES_H
+#define UTHASH_TYPES_H
+#include <uthash.h>
+
 typedef struct _chkptScheme {
     int     where_to_checkpoint;
     double  interval_threshold; /* Threshold interval to checkpoint. */
@@ -30,6 +34,7 @@ typedef struct varProfile_t {
                                       it is compatible with liborhash. */
 #endif
     struct varProfile_t *nextProfile;
+    UT_hash_handle hh;
 } varProfile_t;
 
 typedef struct _varMonitor {
@@ -39,4 +44,6 @@ typedef struct _varMonitor {
     time_t          latest_checkpoint_time;
 } varMonitor_t;
 
+
+#endif /* UTHASH_TYPES_H */
 #endif /* ORNVCR_TYPES_H */
