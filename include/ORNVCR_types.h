@@ -20,9 +20,10 @@ typedef struct _chkptScheme {
 } chkptScheme_t;
 
 typedef struct varProfile_t {
+    void *              address; /* the address of the variable*/
     int                 index; /* As in the allocate order; SCR uses the same approach */
     struct timeval      allocate_time;
-    int                 latest_checkpoint_time;
+    struct timeval      latest_checkpoint_time;
     size_t              size;
     int                 type; /* Data type/structure */
     double              dirty_ratio;
@@ -40,8 +41,10 @@ typedef struct varProfile_t {
 typedef struct _varMonitor {
     varProfile_t    *headProfile;
     varProfile_t    *tailProfile;
+    varProfile_t    *hashtableProfile;
+    int             current_index;
     double          dirtyratio;
-    time_t          latest_checkpoint_time;
+    struct timeval  latest_checkpoint_time;
 } varMonitor_t;
 
 

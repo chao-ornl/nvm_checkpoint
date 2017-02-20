@@ -42,9 +42,28 @@ ORNVCR_exit(varMonitor_t **mon)
 }
 
 bool
-ORNVCR_register(varMonitor_t *mon, void* var_address, varProfile_t profile)
+ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varProfile_t *profile)
 {
-    return false;
+    if(profile==NULL){
+        profile=malloc(sizeof(varProfile_t));
+        profile->address=var_address;
+        profile->index=mon->current_index+1;
+        mon->current_index++;
+        gettimeofday(&(profile->allocate_time),NULL);
+        gettimeofday(&(profile->latest_checkpoint_time),NULL);
+        profile->size=size;
+        profile->type=type;
+        profile->dirty_ratio=0;     
+    }
+    HASH_ADD_INT( mon->hashtableProfile, address, profile);
+    varProfile_t *test;
+
+    // to test if hashtable is working
+    HASH_FIND_INT( mon->hashtableProfile, &var_address, test);
+    if(test->address==var_address)
+        return true;
+    else
+        return false;
 }
 
 bool

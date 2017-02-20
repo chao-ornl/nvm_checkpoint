@@ -56,7 +56,7 @@ ORNVCR_exit(varMonitor_t **mon);
  * insufficient space for the variable table, etc.
  */
 bool
-ORNVCR_register(varMonitor_t *mon, void* var_address, varProfile_t profile);
+ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varProfile_t *profile);
 
 /**
  * The ORNVCR_deregister() function releases the profile (including the
