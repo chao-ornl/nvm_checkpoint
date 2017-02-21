@@ -178,7 +178,7 @@ ORNVCR_restore (varMonitor_t *mon, int var_address, int size);
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period);
+_ORNVCR_monitor_tracking(void * argument);
 
 /**
 * _ORNVCR_monitor_get_dirtyratio() use liborhash’s function to calculate the new hash and the dirty ratio. 
@@ -191,7 +191,9 @@ _ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period);
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_get_dirtyratio(varMonitor_t **mon);
+_ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon);
+
+
 
 
 #endif /* ORNVCR_INCLUDE_H */

@@ -26,8 +26,8 @@ ORNVCR_init(varMonitor_t **mon)
     _m->tailProfile=NULL;
     _m->hashtableProfile=NULL;
     _m->current_index=0;
-    _m->dirty_ratio=0;
-    _m->latest_checkpoint_time={.tv_sec=0,.tv_usec=0};
+    _m->dirtyratio=0;
+    _m->latest_checkpoint_time=(struct timeval){.tv_sec=0,.tv_usec=0};
     *mon = _m;
 
     return true;
@@ -75,6 +75,7 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         struct arg_struct argument;
         argument.mon=mon;
         argument.period=5;
+        printf("create background thread\n");
         pthread_create(&monitor_thread, NULL, _ORNVCR_monitor_tracking, (void*) &argument);
     }
 
@@ -103,7 +104,7 @@ ORNVCR_deregister(varMonitor_t *mon, void* var_address)
     //stop the monitor thread
     {
         bool rc;
-        pthread_join(&monitor_thread, &rc);
+        pthread_join(&monitor_thread, (void *)&rc);
     }
 
     return false;
