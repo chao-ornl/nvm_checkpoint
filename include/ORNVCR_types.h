@@ -13,6 +13,8 @@
 #define UTHASH_TYPES_H
 #include <uthash.h>
 
+#include <pthread.h>
+
 typedef struct _chkptScheme {
     int     where_to_checkpoint;
     double  interval_threshold; /* Threshold interval to checkpoint. */
@@ -47,6 +49,12 @@ typedef struct _varMonitor {
     struct timeval  latest_checkpoint_time;
 } varMonitor_t;
 
+extern pthread_t monitor_thread;
+
+struct arg_struct{
+    varMonitor_t *mon;
+    time_t period;
+};
 
 #endif /* UTHASH_TYPES_H */
 #endif /* ORNVCR_TYPES_H */

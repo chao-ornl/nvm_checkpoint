@@ -43,9 +43,15 @@ _ORNVCR_monitor_register(varMonitor_t **mon, void * var_buff, varProfile *profil
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period)
+_ORNVCR_monitor_tracking(void * argument)
 {
-    return false;
+    struct arg_struct *arg=argument;
+    while(arg->mon->current_index!=0)
+    {
+    	_ORNVCR_monitor_get_dirtyratio();
+    	sleep((int)arg->period);
+    }
+    return true;
 }
 
 /**
