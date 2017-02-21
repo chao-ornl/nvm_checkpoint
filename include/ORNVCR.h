@@ -56,7 +56,7 @@ ORNVCR_exit(varMonitor_t **mon);
  * insufficient space for the variable table, etc.
  */
 bool
-ORNVCR_register(varMonitor_t *mon, void* var_address, varProfile_t profile);
+ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varProfile_t *profile);
 
 /**
  * The ORNVCR_deregister() function releases the profile (including the
@@ -178,7 +178,7 @@ ORNVCR_restore (varMonitor_t *mon, int var_address, int size);
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period);
+_ORNVCR_monitor_tracking(void * argument);
 
 /**
 * _ORNVCR_monitor_get_dirtyratio() use liborhash’s function to calculate the new hash and the dirty ratio. 
@@ -191,7 +191,9 @@ _ORNVCR_monitor_tracking(varMonitor_t **mon, time_t period);
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_get_dirtyratio(varMonitor_t **mon);
+_ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon);
+
+
 
 
 #endif /* ORNVCR_INCLUDE_H */
