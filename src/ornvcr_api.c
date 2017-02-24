@@ -22,8 +22,8 @@ ORNVCR_init(varMonitor_t **mon)
         errno = ENOMEM;
         return false;
     }
-    _m->headProfile=NULL;
-    _m->tailProfile=NULL;
+    //_m->headProfile=NULL;
+    //_m->tailProfile=NULL;
     _m->hashtableProfile=NULL;
     _m->current_index=0;
     _m->dirtyratio=0;
@@ -62,7 +62,28 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         profile->size=size;
         profile->type=type;
         profile->dirty_ratio=0; 
-        //placement and cScheme are not assigned yet    
+        //placement and cScheme are not assigned yet   
+        int rc;
+        //init and calculate the based hash values
+        rc=orhash_init (var_address, size, sizeof (type), &(profile->var_hash));
+        
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_init() failed (line: %d)\n", __LINE__);
+            return false;
+        }
+        rc = orhash_compute_hash (profile->var_hash);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
+            return false;
+        }
+        rc = orhash_set_ref_hash (profile->var_hash);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_set_ref_hash() failed (line: %d)\n", __LINE__);
+            return false;
+        }
     }
     //add the profile to hash table
     HASH_ADD_INT( mon->hashtableProfile, address, profile);

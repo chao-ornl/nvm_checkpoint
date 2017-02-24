@@ -17,6 +17,8 @@ main (int argc, char **argv)
     }
     int * test_var=malloc(8*sizeof(int));
     varProfile_t *test_profile=NULL;
+    for(int i=0;i<8;i++)
+        test_var[i]=0;
 
     rc=ORNVCR_register(mon, test_var, 8*sizeof(int), sizeof(int), test_profile);
     if(rc =! true)
@@ -25,11 +27,14 @@ main (int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    sleep((unsigned int)10);
+    sleep((unsigned int)15);
+    for(int i=0;i<3;i++)
+        test_var[i]=2;
+    sleep((unsigned int)15);
     printf("sleep done\n");
     rc=ORNVCR_deregister(mon, test_var);
     free(test_profile);
-    sleep((unsigned int)30);
+    sleep((unsigned int)15);
     rc = ORNVCR_exit (&mon);
     if (rc != true)
     {
