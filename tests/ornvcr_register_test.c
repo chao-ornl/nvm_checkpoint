@@ -25,9 +25,11 @@ main (int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    sleep(10);
+    sleep((unsigned int)10);
+    printf("sleep done\n");
     rc=ORNVCR_deregister(mon, test_var);
-    sleep(30);
+    free(test_profile);
+    sleep((unsigned int)30);
     rc = ORNVCR_exit (&mon);
     if (rc != true)
     {

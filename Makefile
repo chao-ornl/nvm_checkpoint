@@ -9,7 +9,7 @@ INC		=-I./include
 
 HASH_LIB=./lib/libut.a
 
-CFLAGS = $(INC) -std=c90
+CFLAGS = $(INC) -lpthread
 
 SOURCES		= $(SRC)/ornvcr_api_internal.c $(SRC)/ornvcr_api.c
 OBJS    	= $(SOURCES:.c=.o)

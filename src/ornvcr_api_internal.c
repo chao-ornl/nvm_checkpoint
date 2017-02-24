@@ -49,7 +49,7 @@ _ORNVCR_monitor_tracking(void * argument)
     while(arg->mon->current_index!=0)
     {
     	_ORNVCR_monitor_get_dirtyratio(arg->mon);
-    	sleep((int)arg->period);
+    	sleep((unsigned int)arg->period);
     }
     return true;
 }
