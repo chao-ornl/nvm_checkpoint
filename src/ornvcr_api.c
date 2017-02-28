@@ -23,8 +23,6 @@ ORNVCR_init(varMonitor_t **mon)
         errno = ENOMEM;
         return false;
     }
-    _m->headProfile=NULL;
-    _m->tailProfile=NULL;
     _m->hashtableProfile=NULL;
     _m->current_index=0;
     _m->dirtyratio=0;
