@@ -5,6 +5,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "ORNVCR.h"
 #include "uthash.h"
@@ -76,7 +77,7 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         argument.mon=mon;
         argument.period=5;
         printf("create background thread\n");
-        pthread_create(&monitor_thread, NULL, _ORNVCR_monitor_tracking, (void*) &argument);
+        pthread_create(&monitor_thread, NULL, (void*)_ORNVCR_monitor_tracking, (void*) &argument);
     }
 
     /*
@@ -104,7 +105,7 @@ ORNVCR_deregister(varMonitor_t *mon, void* var_address)
     //stop the monitor thread
     {
         bool rc;
-        pthread_join(&monitor_thread, (void *)&rc);
+        pthread_join(monitor_thread, (void *)&rc);
     }
 
     return false;

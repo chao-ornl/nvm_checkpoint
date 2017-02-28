@@ -19,7 +19,7 @@ main (int argc, char **argv)
     varProfile_t *test_profile=NULL;
 
     rc=ORNVCR_register(mon, test_var, 8*sizeof(int), sizeof(int), test_profile);
-    if(rc =! true)
+    if(rc != true)
     {
         fprintf (stderr, "ERROR: ORNVCR_register() failed\n");
         return EXIT_FAILURE;
