@@ -5,6 +5,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "ORNVCR.h"
 #include "uthash.h"
@@ -22,8 +23,7 @@ ORNVCR_init(varMonitor_t **mon)
         errno = ENOMEM;
         return false;
     }
-    //_m->headProfile=NULL;
-    //_m->tailProfile=NULL;
+
     _m->hashtableProfile=NULL;
     _m->current_index=0;
     _m->dirtyratio=0;
@@ -85,9 +85,9 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
             return false;
         }
     }
+
     //add the profile to hash table
-    HASH_ADD_INT( mon->hashtableProfile, address, profile);
-    //linked list not yet implemented
+    hashtable_add_var(mon, profile);
 
     //if it is the first variable registered
     //create background thread to check dirty ratio
@@ -97,29 +97,17 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         argument->mon=mon;
         argument->period=5;
         printf("create background thread\n");
-        pthread_create(&monitor_thread, NULL, &_ORNVCR_monitor_tracking, (void*) argument);
+        pthread_create(&monitor_thread, NULL, (void*)&_ORNVCR_monitor_tracking, (void*) argument);
+
     }
 
-    /*
-    varProfile_t *test;
-
-    // to test if hashtable is working
-    
-    HASH_FIND_INT( mon->hashtableProfile, &var_address, test);
-    if(test->address==var_address)
-        return true;
-    else
-        return false;
-    */
     return true;
 }
 
 bool
 ORNVCR_deregister(varMonitor_t *mon, void* var_address)
 {
-    varProfile_t *look_var;
-    HASH_FIND_INT( mon->hashtableProfile, &var_address, look_var);
-    HASH_DEL(mon->hashtableProfile,look_var);
+    hashtable_delete_var(mon, var_address);
     mon->current_index--;
     if(mon->current_index==0)
     //stop the monitor thread
@@ -127,6 +115,7 @@ ORNVCR_deregister(varMonitor_t *mon, void* var_address)
         bool rc;
         pthread_join(monitor_thread, (void *)&rc);
         printf("background thread stopped\n");
+
     }
 
     return false;

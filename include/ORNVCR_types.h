@@ -36,16 +36,10 @@ typedef struct varProfile_t {
     orhash_t            *var_hash; /* This is the data structure for checking dirty ratio,
                                       it is compatible with liborhash. */
 #endif
-#if 0
-we may not need this because uthash support iteration
-    struct varProfile_t *nextProfile;
-#endif
     UT_hash_handle hh;
 } varProfile_t;
 
 typedef struct _varMonitor {
-    //varProfile_t    *headProfile;
-    //varProfile_t    *tailProfile;
     varProfile_t    *hashtableProfile;
     int             current_index;
     double          dirtyratio;
