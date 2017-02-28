@@ -7,34 +7,36 @@
 #include "uthash.h"
 
 void hashtable_add_var(varMonitor_t *mon, varProfile_t *profile) {
-	varProfile_t *look_var;
+	varProfile_t *tmp;
 
-	HASH_FIND_INT(mon->hashtableProfile, &(profile->address), look_var);
-	if (look_var == NULL) {
+	HASH_FIND_INT(mon->hashtableProfile, &(profile->address), tmp);
+	if (tmp == NULL) {
 		HASH_ADD_INT(mon->hashtableProfile, address, profile);
 	} else {
-		look_var->index = profile->index;
-		look_var->allocate_time = profile->allocate_time;
-		look_var->latest_checkpoint_time = profile->latest_checkpoint_time;
-		look_var->size = profile->size;
-		look_var->type = profile->type;
-		look_var->dirty_ratio = profile->dirty_ratio;
-		look_var->placement = profile->placement;
-		look_var->cScheme = profile->cScheme;
+		tmp->index = profile->index;
+		tmp->allocate_time = profile->allocate_time;
+		tmp->latest_checkpoint_time = profile->latest_checkpoint_time;
+		tmp->size = profile->size;
+		tmp->type = profile->type;
+		tmp->dirty_ratio = profile->dirty_ratio;
+		tmp->placement = profile->placement;
+		tmp->cScheme = profile->cScheme;
 		free(profile);
 	}
 }
 
 varProfile_t *hashtable_find_var(varMonitor_t *mon, void *address) {
-	varProfile_t *look_var;
+	varProfile_t *tmp;
 
-	HASH_FIND_INT(mon->hashtableProfile, &address, look_var);
-	return look_var;
+	HASH_FIND_INT(mon->hashtableProfile, &address, tmp);
+	return tmp;
 }
 
-void hashtable_delete_var(varMonitor_t *mon, varProfile_t *profile) {
-	HASH_DEL(mon->hashtableProfile, profile);
-	free(profile);
+void hashtable_delete_var(varMonitor_t *mon, void *address) {
+	varProfile_t *tmp;
+	HASH_FIND_INT(mon->hashtableProfile, &address, tmp);
+	HASH_DEL(mon->hashtableProfile, tmp);
+	free(tmp);
 }
 
 void hashtable_delete_all(varMonitor_t *mon) {

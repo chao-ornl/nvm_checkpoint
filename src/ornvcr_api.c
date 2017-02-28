@@ -63,9 +63,9 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         profile->dirty_ratio=0; 
         //placement and cScheme are not assigned yet    
     }
+
     //add the profile to hash table
-    HASH_ADD_INT( mon->hashtableProfile, address, profile);
-    //linked list not yet implemented
+    hashtable_add_var(mon->hashtableProfile, profile);
 
     //if it is the first variable registered
     //create background thread to check dirty ratio
@@ -78,26 +78,13 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         pthread_create(&monitor_thread, NULL, (void*)_ORNVCR_monitor_tracking, (void*) &argument);
     }
 
-    /*
-    varProfile_t *test;
-
-    // to test if hashtable is working
-    
-    HASH_FIND_INT( mon->hashtableProfile, &var_address, test);
-    if(test->address==var_address)
-        return true;
-    else
-        return false;
-    */
     return true;
 }
 
 bool
 ORNVCR_deregister(varMonitor_t *mon, void* var_address)
 {
-    varProfile_t *look_var;
-    HASH_FIND_INT( mon->hashtableProfile, &var_address, look_var);
-    HASH_DEL(mon->hashtableProfile,look_var);
+    hashtable_delete_var(mon->hashtableProfile, &var_address);
     mon->current_index--;
     if(mon->current_index==0)
     //stop the monitor thread

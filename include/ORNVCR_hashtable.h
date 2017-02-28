@@ -16,7 +16,7 @@ void hashtable_add_var(varMonitor_t *mon, varProfile_t *profile);
 
 varProfile_t *hashtable_find_var(varMonitor_t *mon, void *address);
 
-void hashtable_delete_var(varMonitor_t *mon, varProfile_t *profile);
+void hashtable_delete_var(varMonitor_t *mon, void *address);
 
 void hashtable_delete_all(varMonitor_t *mon);
 
