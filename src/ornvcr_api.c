@@ -23,6 +23,7 @@ ORNVCR_init(varMonitor_t **mon)
         errno = ENOMEM;
         return false;
     }
+
     _m->hashtableProfile=NULL;
     _m->current_index=0;
     _m->dirtyratio=0;
@@ -61,7 +62,28 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
         profile->size=size;
         profile->type=type;
         profile->dirty_ratio=0; 
-        //placement and cScheme are not assigned yet    
+        //placement and cScheme are not assigned yet   
+        int rc;
+        //init and calculate the based hash values
+        rc=orhash_init (var_address, size, sizeof (type), &(profile->var_hash));
+        
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_init() failed (line: %d)\n", __LINE__);
+            return false;
+        }
+        rc = orhash_compute_hash (profile->var_hash);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
+            return false;
+        }
+        rc = orhash_set_ref_hash (profile->var_hash);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_set_ref_hash() failed (line: %d)\n", __LINE__);
+            return false;
+        }
     }
 
     //add the profile to hash table
@@ -71,11 +93,12 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
     //create background thread to check dirty ratio
 
     if(mon->current_index==1){
-        struct arg_struct argument;
-        argument.mon=mon;
-        argument.period=5;
+        struct arg_struct *argument=malloc(sizeof(struct arg_struct));
+        argument->mon=mon;
+        argument->period=5;
         printf("create background thread\n");
-        pthread_create(&monitor_thread, NULL, (void*)_ORNVCR_monitor_tracking, (void*) &argument);
+        pthread_create(&monitor_thread, NULL, (void*)&_ORNVCR_monitor_tracking, (void*) argument);
+
     }
 
     return true;
@@ -91,6 +114,8 @@ ORNVCR_deregister(varMonitor_t *mon, void* var_address)
     {
         bool rc;
         pthread_join(monitor_thread, (void *)&rc);
+        printf("background thread stopped\n");
+
     }
 
     return false;

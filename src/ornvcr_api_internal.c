@@ -50,7 +50,7 @@ _ORNVCR_monitor_tracking(void * argument)
     while(arg->mon->current_index!=0)
     {
     	_ORNVCR_monitor_get_dirtyratio(arg->mon);
-    	sleep((int)arg->period);
+    	sleep((unsigned int)arg->period);
     }
     return true;
 }
@@ -69,6 +69,28 @@ bool
 _ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon)
 {
 	printf("check dirty ratio here\n");
+    varProfile_t *temp;
+    double max_ratio=0;
+    for(temp=mon->hashtableProfile;temp!=NULL;temp=temp->hh.next)
+    {
+        int rc;
+        double ratio;
+        rc=orhash_compute_hash(temp->var_hash);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
+            return false;
+        }
+        rc = orhash_get_dirty_ratio (temp->var_hash, &ratio);
+        if (rc != ORHASH_SUCCESS)
+        {
+            fprintf (stderr, "ERROR: orhash_get_dirty_ratio() failed (line: %d)\n", __LINE__);
+            return false;
+        }    
+        temp->dirty_ratio=ratio;
+        printf("ratio is %f\n",ratio);
+    }
+    
     return false;
 }
 

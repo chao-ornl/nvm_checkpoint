@@ -12,6 +12,7 @@
 #ifndef UTHASH_TYPES_H
 #define UTHASH_TYPES_H
 #include <uthash.h>
+#include <orhash.h>
 
 #include <pthread.h>
 
@@ -31,8 +32,7 @@ typedef struct varProfile_t {
     double              dirty_ratio;
     int                 placement; /* Current variable place: stack, DRAM, SSD */
     chkptScheme_t       cScheme;
-#if 0
-    ORHASH is not integrated yet
+#if 1
     orhash_t            *var_hash; /* This is the data structure for checking dirty ratio,
                                       it is compatible with liborhash. */
 #endif

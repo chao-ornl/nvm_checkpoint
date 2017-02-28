@@ -1,5 +1,6 @@
 CC = gcc
 AR = ar
+LIBTOOL = libtool --mode=link
 
 SRC=./src
 INCLUDE=./include
@@ -9,7 +10,9 @@ INC		=-I./include
 
 HASH_LIB=./lib/libut.a
 
-CFLAGS = $(INC) -std=c90
+ORHASH_LIB=./lib/liborhash.a
+
+CFLAGS = $(INC) -lpthread -lmhash
 
 SOURCES		= $(SRC)/ornvcr_api_internal.c $(SRC)/ornvcr_api.c $(SRC)/ornvcr_hashtable.c
 OBJS    	= $(SOURCES:.c=.o)
@@ -35,10 +38,10 @@ $(TARGET_STATIC): $(OBJS)
 	$(AR) rcs $(TARGET_STATIC) $(OBJS)
 
 $(TEST1): $(TARGET_STATIC)
-	$(CC) $(CFLAGS) -o $(TEST1) $(TEST_SOURCES1) $(TARGET_STATIC) $(HASH_LIB)
+	$(CC) $(CFLAGS) -o $(TEST1) $(TEST_SOURCES1) $(TARGET_STATIC) $(HASH_LIB) $(ORHASH_LIB)
 
 $(TEST2): $(TARGET_STATIC)
-	$(CC) $(CFLAGS) -o $(TEST2) $(TEST_SOURCES2) $(TARGET_STATIC) $(HASH_LIB)
+	$(CC) $(CFLAGS) -o $(TEST2) $(TEST_SOURCES2) $(TARGET_STATIC) $(HASH_LIB) $(ORHASH_LIB)
 
 clean: 
 	rm -f ${SRC}/*.o liborcr.a liborcr.so*
