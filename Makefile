@@ -11,7 +11,7 @@ HASH_LIB=./lib/libut.a
 
 CFLAGS = $(INC) -std=c90
 
-SOURCES		= $(SRC)/ornvcr_api_internal.c $(SRC)/ornvcr_api.c
+SOURCES		= $(SRC)/ornvcr_api_internal.c $(SRC)/ornvcr_api.c $(SRC)/ornvcr_hashtable.c
 OBJS    	= $(SOURCES:.c=.o)
 
 TEST_SOURCES1		= $(TEST_SRC)/ornvcr_init_test.c 
