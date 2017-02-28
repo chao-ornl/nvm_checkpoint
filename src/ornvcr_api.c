@@ -65,7 +65,7 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
     }
 
     //add the profile to hash table
-    hashtable_add_var(mon->hashtableProfile, profile);
+    hashtable_add_var(mon, profile);
 
     //if it is the first variable registered
     //create background thread to check dirty ratio
@@ -84,7 +84,7 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
 bool
 ORNVCR_deregister(varMonitor_t *mon, void* var_address)
 {
-    hashtable_delete_var(mon->hashtableProfile, &var_address);
+    hashtable_delete_var(mon, var_address);
     mon->current_index--;
     if(mon->current_index==0)
     //stop the monitor thread
