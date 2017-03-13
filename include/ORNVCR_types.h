@@ -16,8 +16,13 @@
 
 #include <pthread.h>
 
+#define LOCALMEM 0
+#define LOCALSSD 1
+#define PEERSSD  2
+#define PFS      3
+
 typedef struct _chkptScheme {
-    int     where_to_checkpoint;
+    int     where_to_checkpoint; 
     double  interval_threshold; /* Threshold interval to checkpoint. */
     double  dirty_threshold;    /* threshold dirty ratio to checkpoint. */
 } chkptScheme_t;
@@ -27,11 +32,13 @@ typedef struct varProfile_t {
     int                 index; /* As in the allocate order; SCR uses the same approach */
     struct timeval      allocate_time;
     struct timeval      latest_checkpoint_time;
+    size_t              type_size;
+    size_t              count; /* Data type/structure */
     size_t              size;
-    int                 type; /* Data type/structure */
     double              dirty_ratio;
     int                 placement; /* Current variable place: stack, DRAM, SSD */
     chkptScheme_t       cScheme;
+    char               chkpt_base_path[80];
 #if 1
     orhash_t            *var_hash; /* This is the data structure for checking dirty ratio,
                                       it is compatible with liborhash. */
@@ -44,6 +51,8 @@ typedef struct _varMonitor {
     int             current_index;
     double          dirtyratio;
     struct timeval  latest_checkpoint_time;
+    char *          chkpt_base_path[5]; // the directory that contains checkpoint files, up to 5 levels
+    int             current_version;
 } varMonitor_t;
 
 extern pthread_t monitor_thread;

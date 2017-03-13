@@ -5,6 +5,7 @@
 
 #include "ORNVCR.h"
 #include "uthash.h"
+#include "ORNVCR_hashtable.h"
 
 void hashtable_add_var(varMonitor_t *mon, varProfile_t *profile) {
 	varProfile_t *tmp;
@@ -17,10 +18,12 @@ void hashtable_add_var(varMonitor_t *mon, varProfile_t *profile) {
 		tmp->allocate_time = profile->allocate_time;
 		tmp->latest_checkpoint_time = profile->latest_checkpoint_time;
 		tmp->size = profile->size;
-		tmp->type = profile->type;
+		tmp->count = profile->count;
+        tmp->type_size = profile->type_size;
 		tmp->dirty_ratio = profile->dirty_ratio;
 		tmp->placement = profile->placement;
 		tmp->cScheme = profile->cScheme;
+        strcpy(tmp->chkpt_base_path,profile->chkpt_base_path);
 		free(profile);
 	}
 }
@@ -35,8 +38,19 @@ varProfile_t *hashtable_find_var(varMonitor_t *mon, void *address) {
 void hashtable_delete_var(varMonitor_t *mon, void *address) {
 	varProfile_t *tmp;
 	HASH_FIND_INT(mon->hashtableProfile, &address, tmp);
+    if(tmp==NULL)
+    {
+        fprintf (stderr, "ERROR: hash find failed\n");
+        exit(EXIT_FAILURE);
+    }
 	HASH_DEL(mon->hashtableProfile, tmp);
+    if(tmp==NULL)
+    {
+        fprintf (stderr, "ERROR: hash find failed\n");
+        exit(EXIT_FAILURE);
+    }
 	free(tmp);
+    printf("free tmp OK\n");
 }
 
 void hashtable_delete_all(varMonitor_t *mon) {

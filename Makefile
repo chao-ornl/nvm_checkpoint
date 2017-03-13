@@ -44,4 +44,4 @@ $(TEST2): $(TARGET_STATIC)
 	$(CC) $(CFLAGS) -o $(TEST2) $(TEST_SOURCES2) $(TARGET_STATIC) $(HASH_LIB) $(ORHASH_LIB)
 
 clean: 
-	rm -f ${SRC}/*.o liborcr.a liborcr.so*
+	rm -f ${SRC}/*.o $(TEST1) $(TEST2) liborcr.a liborcr.so*

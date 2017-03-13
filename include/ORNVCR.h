@@ -177,7 +177,7 @@ ORNVCR_restore (varMonitor_t *mon, int var_address, int size);
 * @return FALSE upon errors, and the global variable errno is set to indicate
 * the error; EINVAL: The options argument is not valid.
 */
-bool
+bool *
 _ORNVCR_monitor_tracking(void * argument);
 
 /**
@@ -191,10 +191,35 @@ _ORNVCR_monitor_tracking(void * argument);
 * the error; EINVAL: The options argument is not valid.
 */
 bool
-_ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon);
+_ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon, int *flag);
 
 
 
+/**
+* _ORNVCR_checkpoint_routine_one() dumps the memory of a variable to a storage location 
+* It only saves per variable
+* @param[in,out]   profile the variable profile of the variable to be checkpointed
+* @return TRUE upon success.
+* @return FALSE upon errors, and the global variable errno is set to indicate
+* the error; EINVAL: The options argument is not valid.
+*/
+bool _ORNVCR_checkpoint_routine_one(varProfile_t *profile,char * path);
+
+/**
+* _ORNVCR_checkpoint_routine_all() dumps the memory of all variables to specified storage locations 
+* It saves all variables
+* @param[in,out]   mon monitor structure
+* @return TRUE upon success.
+* @return FALSE upon errors, and the global variable errno is set to indicate
+* the error; EINVAL: The options argument is not valid.
+*/
+bool _ORNVCR_checkpoint_routine_all(varMonitor_t *mon);
+
+bool _ORNVCR_generate_chkpt_filepath(varMonitor_t *mon, varProfile_t *profile, char *path);
+
+bool _ORNVCR_find_last_chkptfile(varMonitor_t *mon, varProfile_t *profile);
+
+bool _ORNVCR_update_chkptfile_version(char *path, int version);
 
 #endif /* ORNVCR_INCLUDE_H */
 

@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "ORNVCR.h"
+#include "ORNVCR_hashtable.h"
 #include "uthash.h"
 
 pthread_t monitor_thread;
@@ -28,6 +29,7 @@ ORNVCR_init(varMonitor_t **mon)
     _m->current_index=0;
     _m->dirtyratio=0;
     _m->latest_checkpoint_time=(struct timeval){.tv_sec=0,.tv_usec=0};
+    _m->current_version=0;
     *mon = _m;
 
     return true;
@@ -54,36 +56,38 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
     
     if(profile==NULL){
         profile=malloc(sizeof(varProfile_t));
-        profile->address=var_address;
-        profile->index=mon->current_index+1;
-        mon->current_index++;
-        gettimeofday(&(profile->allocate_time),NULL);
-        gettimeofday(&(profile->latest_checkpoint_time),NULL);
-        profile->size=size;
-        profile->type=type;
-        profile->dirty_ratio=0; 
-        //placement and cScheme are not assigned yet   
-        int rc;
-        //init and calculate the based hash values
-        rc=orhash_init (var_address, size, sizeof (type), &(profile->var_hash));
-        
-        if (rc != ORHASH_SUCCESS)
-        {
-            fprintf (stderr, "ERROR: orhash_init() failed (line: %d)\n", __LINE__);
-            return false;
-        }
-        rc = orhash_compute_hash (profile->var_hash);
-        if (rc != ORHASH_SUCCESS)
-        {
-            fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
-            return false;
-        }
-        rc = orhash_set_ref_hash (profile->var_hash);
-        if (rc != ORHASH_SUCCESS)
-        {
-            fprintf (stderr, "ERROR: orhash_set_ref_hash() failed (line: %d)\n", __LINE__);
-            return false;
-        }
+    }
+    
+    profile->address=var_address;
+    profile->index=mon->current_index+1;
+    mon->current_index++;
+    gettimeofday(&(profile->allocate_time),NULL);
+    gettimeofday(&(profile->latest_checkpoint_time),NULL);
+    profile->size=size;
+    profile->type_size=type;
+    profile->count=size/type;
+    profile->dirty_ratio=0; 
+    //placement and cScheme are not assigned yet   
+    int rc;
+    //init and calculate the based hash values
+    rc=orhash_init (var_address, size, sizeof (type), &(profile->var_hash));
+    
+    if (rc != ORHASH_SUCCESS)
+    {
+        fprintf (stderr, "ERROR: orhash_init() failed (line: %d)\n", __LINE__);
+        return false;
+    }
+    rc = orhash_compute_hash (profile->var_hash);
+    if (rc != ORHASH_SUCCESS)
+    {
+        fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
+        return false;
+    }
+    rc = orhash_set_ref_hash (profile->var_hash);
+    if (rc != ORHASH_SUCCESS)
+    {
+        fprintf (stderr, "ERROR: orhash_set_ref_hash() failed (line: %d)\n", __LINE__);
+        return false;
     }
 
     //add the profile to hash table
@@ -109,11 +113,17 @@ ORNVCR_deregister(varMonitor_t *mon, void* var_address)
 {
     hashtable_delete_var(mon, var_address);
     mon->current_index--;
+    sleep(10);
     if(mon->current_index==0)
     //stop the monitor thread
     {
-        bool rc;
-        pthread_join(monitor_thread, (void *)&rc);
+        bool * rc;
+        pthread_join(monitor_thread, (void **)&rc);
+        if (*rc != true)
+        {
+            fprintf (stderr, "ERROR: thread terminated before exit (line: %d)\n", __LINE__);
+            return false;
+        }
         printf("background thread stopped\n");
 
     }

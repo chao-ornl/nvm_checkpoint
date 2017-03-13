@@ -16,7 +16,12 @@ main (int argc, char **argv)
         return EXIT_FAILURE;
     }
     int * test_var=malloc(8*sizeof(int));
-    varProfile_t *test_profile=NULL;
+    varProfile_t *test_profile=malloc(sizeof(varProfile_t));
+    strcpy(test_profile->chkpt_base_path,"./chkptfile");
+    test_profile->cScheme.dirty_threshold=0.1;
+    test_profile->cScheme.interval_threshold=10;
+    
+    
     for(int i=0;i<8;i++)
         test_var[i]=0;
 
@@ -33,8 +38,9 @@ main (int argc, char **argv)
     sleep((unsigned int)15);
     printf("sleep done\n");
     rc=ORNVCR_deregister(mon, test_var);
-    free(test_profile);
-    sleep((unsigned int)15);
+    //hashtable delete will free the profile structure
+    //free(test_profile);
+    //sleep((unsigned int)15);
     rc = ORNVCR_exit (&mon);
     if (rc != true)
     {
