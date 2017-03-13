@@ -11,3 +11,6 @@ test_init
 test_register
 # Project files
 *.kdev4
+
+#checkpoint directory
+chkptfile
