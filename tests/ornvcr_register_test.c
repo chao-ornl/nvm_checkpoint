@@ -22,7 +22,8 @@ main (int argc, char **argv)
     test_profile->cScheme.interval_threshold=10;
     
     
-    for(int i=0;i<8;i++)
+    int i;
+    for(i=0;i<8;i++)
         test_var[i]=0;
 
     rc=ORNVCR_register(mon, test_var, 8*sizeof(int), sizeof(int), test_profile);
@@ -33,7 +34,7 @@ main (int argc, char **argv)
     }
 
     sleep((unsigned int)15);
-    for(int i=0;i<3;i++)
+    for(i=0;i<3;i++)
         test_var[i]=2;
     sleep((unsigned int)15);
     printf("sleep done\n");
