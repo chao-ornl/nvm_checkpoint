@@ -70,7 +70,11 @@ ORNVCR_register(varMonitor_t *mon, void* var_address, int size, int type, varPro
     //placement and cScheme are not assigned yet   
     int rc;
     //init and calculate the based hash values
-    rc=orhash_init (var_address, size, sizeof (type), &(profile->var_hash));
+    rc=orhash_init (var_address, size, 10000*type, &(profile->var_hash));
+    
+    hash_compute_time=0.0;
+    compare_time=0.0;
+    checkpoint_time=0.0;
     
     if (rc != ORHASH_SUCCESS)
     {

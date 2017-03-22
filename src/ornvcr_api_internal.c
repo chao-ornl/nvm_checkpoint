@@ -9,6 +9,10 @@
 
 #include "ORNVCR.h"
 
+
+
+
+
 /**
 *the following code may be not neccessary because we are using explicit mon in external APIs.
 **
@@ -78,13 +82,24 @@ _ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon, int *flag)
     {
         int rc;
         double ratio;
+        
+        clock_t tick,tock;
+        tick=clock();
         rc=orhash_compute_hash(temp->var_hash);
+        tock=clock();
+        hash_compute_time+=(double)(tock-tick);
+        
         if (rc != ORHASH_SUCCESS)
         {
             fprintf (stderr, "ERROR: orhash_compute_hash() failed (line: %d)\n", __LINE__);
             return false;
         }
+        
+        tick=clock();
         rc = orhash_get_dirty_ratio (temp->var_hash, &ratio);
+        tock=clock();
+        compare_time+=(double)(tock-tick);
+        
         if (rc != ORHASH_SUCCESS)
         {
             fprintf (stderr, "ERROR: orhash_get_dirty_ratio() failed (line: %d)\n", __LINE__);
@@ -94,7 +109,13 @@ _ORNVCR_monitor_get_dirtyratio(varMonitor_t *mon, int *flag)
         if(temp->dirty_ratio>temp->cScheme.dirty_threshold){
             //if any variable's dirty ratio reaches threshold, conduct checkpoint
             *flag=1; 
+            
+            clock_t tick,tock;
+            tick=clock();
             _ORNVCR_checkpoint_routine_all(mon);
+            tock=clock();
+            checkpoint_time+=(double)(tock-tick);
+            
             mon->current_version++;
             return true;
         }

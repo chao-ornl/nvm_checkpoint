@@ -8,6 +8,11 @@
 
 #include <stdbool.h>
 #include "ORNVCR_types.h"
+#include <time.h>
+
+double hash_compute_time;
+double compare_time;
+double checkpoint_time;
 
 /**
  * The ORNVCR_init() function (1) allocates necessary variables with proper
