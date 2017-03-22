@@ -24,6 +24,7 @@ main (int argc, char **argv)
     test_profile->cScheme.interval_threshold=10;
     
     
+    int i;
     for(int i=0;i<var_size;i++)
         test_var[i]=0;
 
@@ -35,7 +36,9 @@ main (int argc, char **argv)
     }
 
     sleep((unsigned int)15);
-    for(int i=0;i<0.3*var_size;i++)
+
+    
+    for(i=0;i<0.3*var_size;i++)
         test_var[i]=2;
     sleep((unsigned int)15);
     printf("sleep done\n");
