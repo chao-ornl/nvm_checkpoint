@@ -25,7 +25,7 @@ main (int argc, char **argv)
     
     
     int i;
-    for(int i=0;i<var_size;i++)
+    for(i=0;i<var_size;i++)
         test_var[i]=0;
 
     rc=ORNVCR_register(mon, test_var, var_size*sizeof(int), sizeof(int), test_profile);
